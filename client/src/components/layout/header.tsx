@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { Layout, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Layout, Button, notification } from 'antd';
+import { Link, useHistory } from 'react-router-dom';
 import Logo from '../../images/logo.png';
+import { useMutation, useQuery } from '@apollo/client';
+import { LOGOUT_MUTATION, ME_QUERY } from '../../graphql';
 
 const { Header } = Layout;
 
@@ -17,6 +19,28 @@ const HeaderContainer = styled.header`
 `;
 
 const AppHeader: React.FC = () => {
+  const history = useHistory();
+
+  const { data, called } = useQuery(ME_QUERY);
+  const [logout] = useMutation(LOGOUT_MUTATION);
+
+  const handleLogout = () => {
+    logout()
+      .then((response) => {
+        if (response?.data?.logout) {
+          notification['success']({
+            message: 'Successfully logged out!',
+          });
+          history.push('/login');
+        }
+      })
+      .catch((err) => {
+        notification['error']({
+          message: err.message,
+        });
+      });
+  };
+
   return (
     <HeaderContainer>
       <Header className="app-header">
@@ -48,7 +72,7 @@ const AppHeader: React.FC = () => {
 
         <Button
           type="link"
-          //onClick={() => handleLogout()}
+          onClick={handleLogout}
           style={{ height: '50%', padding: 0, transform: 'translateY(50%)' }}
         >
           Logout
