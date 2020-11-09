@@ -16,7 +16,7 @@ const AppLayout: React.FC = ({ children }) => {
       }}
     >
       <AppHeader user={data?.me} />
-      <Layout style={{ width: '90%', margin: '40px auto' }}>
+      <Layout style={{ width: '90%', margin: '40px auto', background: '#fff' }}>
         <AppSider />
         <Content
           style={{

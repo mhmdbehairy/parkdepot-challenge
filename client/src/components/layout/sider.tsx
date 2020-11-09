@@ -6,9 +6,9 @@ import { Link, useLocation, withRouter } from 'react-router-dom';
 const { Sider } = Layout;
 const { Item } = Menu;
 
-const SiderContainer = styled.header`
+const SiderContainer = styled.div`
   .app-sider {
-    background-color: '#fff';
+    background-color: #fff;
   }
 
   .side-menu {
