@@ -2,7 +2,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 import { Form, Input, Button, notification } from 'antd';
 import { useMutation } from '@apollo/client';
-import { RouteComponentProps } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { setAccessToken } from '../../accessToken';
 import { LOGIN_MUTATION, ME_QUERY } from '../../graphql';
 import BackgroundImage from '../../images/landing-page.jpg';
@@ -26,9 +26,8 @@ const FormContainer = styled.div`
   background-color: #fff;
 `;
 
-const Login: React.FC<RouteComponentProps> = ({ history }) => {
-  const [form] = Form.useForm();
-
+const Login: React.FC = () => {
+  const history = useHistory();
   const [login] = useMutation(LOGIN_MUTATION);
 
   const onFinish = (values: { email: string; password: string }) => {
@@ -48,19 +47,25 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
           data: { me: data.login.user },
         });
       },
-    }).then((response) => {
-      if (response?.data) {
-        notification['success']({
-          message: 'Successfully logged in!',
-        });
-        setAccessToken(response.data.login.accessToken);
-        history.push('/');
-      } else {
+    })
+      .then((response) => {
+        if (response?.data) {
+          notification['success']({
+            message: 'Successfully logged in!',
+          });
+          setAccessToken(response.data.login.accessToken);
+          history.push('/');
+        } else {
+          notification['error']({
+            message: 'Failed to login, try again!',
+          });
+        }
+      })
+      .catch((err) => {
         notification['error']({
-          message: 'Failed to login, try again!',
+          message: err.message,
         });
-      }
-    });
+      });
   };
 
   return (
