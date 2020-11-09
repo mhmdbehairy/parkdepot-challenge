@@ -1,3 +1,4 @@
+import { AppLayout } from 'components';
 import React from 'react';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
@@ -8,9 +9,12 @@ export const Routes: React.FC = () => {
   return (
     <BrowserRouter>
       <Switch>
-        <Route exact path="/" component={Home} />
         <Route exact path="/login" component={Login} />
-        <Route exact path="/whitelist" component={WhiteList} />
+
+        <AppLayout>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/whitelist" component={WhiteList} />
+        </AppLayout>
       </Switch>
     </BrowserRouter>
   );
