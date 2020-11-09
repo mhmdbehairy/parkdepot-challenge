@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { getAccessToken, setAccessToken } from './accessToken';
+import { setAccessToken } from './accessToken';
 import { Routes } from './Routes';
 import 'antd/dist/antd.css';
 

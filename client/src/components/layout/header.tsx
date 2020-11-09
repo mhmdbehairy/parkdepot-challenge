@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { useQuery } from '@apollo/client';
-import { Layout, Button, Badge } from 'antd';
-import { ME_QUERY } from '../../graphql';
+import { Layout, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import Logo from '../../images/logo.png';
 
@@ -19,8 +17,6 @@ const HeaderContainer = styled.header`
 `;
 
 const AppHeader: React.FC = () => {
-  const { data } = useQuery(ME_QUERY);
-
   return (
     <HeaderContainer>
       <Header className="app-header">
@@ -38,7 +34,7 @@ const AppHeader: React.FC = () => {
           </Link>
         </div>
 
-        {data?.user?.email && (
+        {/*  {data?.user?.email && (
           <Badge
             status="success"
             text={data?.user?.email}
@@ -48,7 +44,7 @@ const AppHeader: React.FC = () => {
               transform: 'translateY(20%)',
             }}
           />
-        )}
+        )} */}
 
         <Button
           type="link"

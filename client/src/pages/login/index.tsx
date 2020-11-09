@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { Form, Input, Button, notification } from 'antd';
+import { Form, Input, Button, notification, message } from 'antd';
 import { useMutation } from '@apollo/client';
 import { RouteComponentProps } from 'react-router-dom';
 import { setAccessToken } from '../../accessToken';
@@ -46,19 +46,25 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
           data: { me: data.login.user },
         });
       },
-    }).then((response) => {
-      if (response?.data) {
-        notification['success']({
-          message: 'Successfully logged in!',
-        });
-        setAccessToken(response.data.login.accessToken);
-        history.push('/');
-      } else {
+    })
+      .then((response) => {
+        if (response?.data) {
+          notification['success']({
+            message: 'Successfully logged in!',
+          });
+          setAccessToken(response.data.login.accessToken);
+          history.push('/');
+        } else {
+          notification['error']({
+            message: 'Failed to login, try again!',
+          });
+        }
+      })
+      .catch((err) => {
         notification['error']({
-          message: 'Failed to login, try again!',
+          message: err.message,
         });
-      }
-    });
+      });
   };
 
   return (
