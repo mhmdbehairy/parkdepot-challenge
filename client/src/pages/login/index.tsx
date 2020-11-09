@@ -95,29 +95,3 @@ const Login: React.FC<RouteComponentProps> = ({ history }) => {
 };
 
 export default Login;
-
-/* const handleSubmit = async (e) => {
-  e.preventDefault();
-  console.log('form submitted');
-  console.log(email, password);
-  const response = await login({
-    variables: {
-      email,
-      password,
-    },
-    update: (store, { data }) => {
-      if (!data) {
-        return null;
-      }
-      store.writeQuery({
-        query: ME_QUERY,
-        data: { me: data.login.user },
-      });
-    },
-  });
-  console.log(response);
-  if (response && response.data) {
-    setAccessToken(response.data.login.accessToken);
-  }
-  history.push('/'); 
-} */
