@@ -1,29 +1,43 @@
 import React from 'react';
-
+import styled from '@emotion/styled';
 import { Layout, Menu } from 'antd';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useLocation, withRouter } from 'react-router-dom';
 
 const { Sider } = Layout;
 const { Item } = Menu;
 
+const SiderContainer = styled.header`
+  .app-sider {
+    background-color: '#fff';
+  }
+
+  .side-menu {
+    background-color: #f2f2f2;
+    border-right: 0;
+  }
+`;
+
 const AppSider: React.FC = () => {
+  const location = useLocation();
+
   return (
-    <Sider width="210" style={{ backgroundColor: '#fff' }}>
-      <Menu
-        mode="inline"
-        style={{ backgroundColor: '#F2F2F2', borderRight: 0 }}
-      >
-        <Item className="menuItem" key="1">
-          <Link to="">Home</Link>
-        </Item>
-        <Item className="menuItem" key="2">
-          <Link to="">WhiteList</Link>
-        </Item>
-        <Item className="menuItem" key="3">
-          <Link to="">Users</Link>
-        </Item>
-      </Menu>
-    </Sider>
+    <SiderContainer>
+      <Sider className="app-sider" width="220">
+        <Menu
+          mode="inline"
+          className="side-menu"
+          defaultSelectedKeys={['/']}
+          selectedKeys={[location.pathname]}
+        >
+          <Item className="menuItem" key="/">
+            <Link to="/">Home</Link>
+          </Item>
+          <Item className="menuItem" key="/whitelist">
+            <Link to="/whitelist">WhiteList</Link>
+          </Item>
+        </Menu>
+      </Sider>
+    </SiderContainer>
   );
 };
 
