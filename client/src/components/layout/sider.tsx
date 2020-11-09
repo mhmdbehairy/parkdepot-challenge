@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React from 'react';
 
 import { Layout, Menu } from 'antd';
-import styled from '@emotion/styled/macro';
-import { Link, useLocation, matchPath, withRouter } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 const { Sider } = Layout;
-const { SubMenu, Item } = Menu;
+const { Item } = Menu;
 
 const AppSider: React.FC = () => {
   return (
@@ -17,10 +16,10 @@ const AppSider: React.FC = () => {
         <Item className="menuItem" key="1">
           <Link to="">Home</Link>
         </Item>
-        <Item className="menuItem" key="1">
+        <Item className="menuItem" key="2">
           <Link to="">WhiteList</Link>
         </Item>
-        <Item className="menuItem" key="1">
+        <Item className="menuItem" key="3">
           <Link to="">Users</Link>
         </Item>
       </Menu>

@@ -27,8 +27,6 @@ const FormContainer = styled.div`
 `;
 
 const Login: React.FC<RouteComponentProps> = ({ history }) => {
-  const [form] = Form.useForm();
-
   const [login] = useMutation(LOGIN_MUTATION);
 
   const onFinish = (values: { email: string; password: string }) => {
