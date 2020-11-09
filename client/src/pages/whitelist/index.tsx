@@ -1,11 +1,17 @@
 import React from 'react';
-import { Table } from 'antd';
+import { Space, Table } from 'antd';
 import styled from '@emotion/styled';
 import { PrimaryTitle, ContentHeader, PrimaryButton } from 'components';
+import { useQuery } from '@apollo/client';
+import { GET_WHITELIST_ITEMS } from '../../graphql';
 
 const WhitelistContainer = styled.section``;
 
 const WhiteList: React.FC = () => {
+  const { data, loading } = useQuery(GET_WHITELIST_ITEMS, {
+    fetchPolicy: 'network-only',
+  });
+
   const columns = [
     {
       title: 'Id',
@@ -13,15 +19,26 @@ const WhiteList: React.FC = () => {
     },
     {
       title: 'License Plate',
-      dataIndex: 'licensePlate',
+      dataIndex: 'lisencePlate',
     },
     {
       title: 'From',
-      dataIndex: 'from',
+      dataIndex: 'fromTime',
     },
     {
       title: 'To',
-      dataIndex: 'to',
+      dataIndex: 'toTime',
+    },
+    {
+      title: 'Actions',
+      render: () => {
+        return (
+          <Space size="large">
+            <a href="#!">Edit</a>
+            <a href="#!">Delete</a>
+          </Space>
+        );
+      },
     },
   ];
 
@@ -34,11 +51,15 @@ const WhiteList: React.FC = () => {
 
       <Table
         bordered
-        dataSource={[]}
+        dataSource={data?.whitelistitems}
         columns={columns}
-        //loading={}
+        loading={loading}
         rowKey="id"
-        //pagination={{}}
+        pagination={{
+          showSizeChanger: true,
+          pageSizeOptions: ['5', '10', '15'],
+          defaultPageSize: 5,
+        }}
       />
     </WhitelistContainer>
   );
