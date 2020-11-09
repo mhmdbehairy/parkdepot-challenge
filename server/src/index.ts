@@ -4,6 +4,7 @@ import express from 'express';
 import { ApolloServer } from 'apollo-server-express';
 import { buildSchema } from 'type-graphql';
 import { UserResolver } from './resolvers/UserResolver';
+import { WhitelistResolver } from './resolvers/WhiteListResolver';
 import { createConnection } from 'typeorm';
 import cookieParser from 'cookie-parser';
 import { verify } from 'jsonwebtoken';
@@ -55,7 +56,7 @@ import { sendRefreshToken } from './sendRefreshTokem';
 
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
-      resolvers: [UserResolver],
+      resolvers: [UserResolver, WhitelistResolver],
     }),
     context: ({ req, res }) => ({ req, res }),
   });
