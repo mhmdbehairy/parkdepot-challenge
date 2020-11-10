@@ -72,7 +72,7 @@ const Login: React.FC = () => {
     <Background>
       <FormContainer>
         <Form
-          name="basic"
+          name="login-form"
           initialValues={{ remember: true }}
           onFinish={onFinish}
         >

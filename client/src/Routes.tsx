@@ -3,7 +3,7 @@ import React from 'react';
 
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 
-import { Login, WhiteList, Home } from './pages';
+import { Login, WhiteList, Home, CreateForm } from './pages';
 
 export const Routes: React.FC = () => {
   return (
@@ -14,6 +14,7 @@ export const Routes: React.FC = () => {
         <AppLayout>
           <Route exact path="/" component={Home} />
           <Route exact path="/whitelist" component={WhiteList} />
+          <Route exact path="/new-item" component={CreateForm} />
         </AppLayout>
       </Switch>
     </BrowserRouter>
