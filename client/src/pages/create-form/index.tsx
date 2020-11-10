@@ -31,7 +31,7 @@ const NewUserContainer = styled.section`
   ${CancelButton}
 `;
 
-const Home: React.FC = () => {
+const CreateForm: React.FC = () => {
   const [form] = Form.useForm();
   const history = useHistory();
 
@@ -163,4 +163,4 @@ const Home: React.FC = () => {
   );
 };
 
-export default Home;
+export default CreateForm;
