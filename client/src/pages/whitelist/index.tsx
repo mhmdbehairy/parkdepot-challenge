@@ -1,6 +1,7 @@
 import React from 'react';
 import { Space, Table } from 'antd';
 import styled from '@emotion/styled';
+import { useHistory } from 'react-router-dom';
 import { PrimaryTitle, ContentHeader, PrimaryButton } from 'components';
 import { useQuery } from '@apollo/client';
 import { GET_WHITELIST_ITEMS } from '../../graphql';
@@ -8,6 +9,8 @@ import { GET_WHITELIST_ITEMS } from '../../graphql';
 const WhitelistContainer = styled.section``;
 
 const WhiteList: React.FC = () => {
+  const history = useHistory();
+
   const { data, loading } = useQuery(GET_WHITELIST_ITEMS, {
     fetchPolicy: 'network-only',
   });
@@ -46,7 +49,9 @@ const WhiteList: React.FC = () => {
     <WhitelistContainer>
       <ContentHeader>
         <PrimaryTitle>Whitelist</PrimaryTitle>
-        <PrimaryButton>Add Item</PrimaryButton>
+        <PrimaryButton onClick={() => history.push('/new-item')}>
+          Add Item
+        </PrimaryButton>
       </ContentHeader>
 
       <Table
