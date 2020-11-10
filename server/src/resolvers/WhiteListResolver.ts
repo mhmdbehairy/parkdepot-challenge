@@ -27,6 +27,16 @@ export class WhitelistResolver {
 
   @Mutation(() => CreateResponse)
   @UseMiddleware(isAuth)
+  async deleteItem(@Arg('id') id: number): Promise<CreateResponse> {
+    await WhiteListItem.delete(id);
+    return {
+      status: true,
+      message: 'Item deleted successfully!',
+    };
+  }
+
+  @Mutation(() => CreateResponse)
+  @UseMiddleware(isAuth)
   async createItem(
     @Arg('lisencePlate') lisencePlate: string,
     @Arg('fromTime') fromTime: string,
