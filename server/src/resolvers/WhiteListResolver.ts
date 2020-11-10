@@ -40,9 +40,9 @@ export class WhitelistResolver {
   @UseMiddleware(isAuth)
   async updateItem(
     @Arg('id') id: number,
-    @Arg('lisencePlate', () => String, { nullable: true }) lisencePlate: string,
-    @Arg('fromTime', () => String, { nullable: true }) fromTime: string,
-    @Arg('toTime', () => String, { nullable: true }) toTime: string
+    @Arg('lisencePlate') lisencePlate: string,
+    @Arg('fromTime') fromTime: string,
+    @Arg('toTime') toTime: string
   ): Promise<CreateResponse> {
     const item = await WhiteListItem.findOne(id);
 
@@ -53,17 +53,7 @@ export class WhitelistResolver {
       };
     }
 
-    if (typeof lisencePlate !== 'undefined') {
-      await WhiteListItem.update({ id }, { lisencePlate });
-    }
-
-    if (typeof fromTime !== 'undefined') {
-      await WhiteListItem.update({ id }, { fromTime });
-    }
-
-    if (typeof toTime !== 'undefined') {
-      await WhiteListItem.update({ id }, { toTime });
-    }
+    await WhiteListItem.update({ id }, { lisencePlate, fromTime, toTime });
 
     return {
       status: true,
