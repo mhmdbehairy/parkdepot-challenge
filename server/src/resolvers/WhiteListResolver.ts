@@ -38,6 +38,41 @@ export class WhitelistResolver {
 
   @Mutation(() => CreateResponse)
   @UseMiddleware(isAuth)
+  async updateItem(
+    @Arg('id') id: number,
+    @Arg('lisencePlate', () => String, { nullable: true }) lisencePlate: string,
+    @Arg('fromTime', () => String, { nullable: true }) fromTime: string,
+    @Arg('toTime', () => String, { nullable: true }) toTime: string
+  ): Promise<CreateResponse> {
+    const item = await WhiteListItem.findOne(id);
+
+    if (!item) {
+      return {
+        status: false,
+        message: 'Item not found!',
+      };
+    }
+
+    if (typeof lisencePlate !== 'undefined') {
+      await WhiteListItem.update({ id }, { lisencePlate });
+    }
+
+    if (typeof fromTime !== 'undefined') {
+      await WhiteListItem.update({ id }, { fromTime });
+    }
+
+    if (typeof toTime !== 'undefined') {
+      await WhiteListItem.update({ id }, { toTime });
+    }
+
+    return {
+      status: true,
+      message: 'Item updated successfully!',
+    };
+  }
+
+  @Mutation(() => CreateResponse)
+  @UseMiddleware(isAuth)
   async createItem(
     @Arg('lisencePlate') lisencePlate: string,
     @Arg('fromTime') fromTime: string,
