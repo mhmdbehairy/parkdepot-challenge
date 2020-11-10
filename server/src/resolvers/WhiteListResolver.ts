@@ -1,6 +1,7 @@
 import {
   Arg,
   Field,
+  Int,
   Mutation,
   ObjectType,
   Query,
@@ -27,7 +28,7 @@ export class WhitelistResolver {
 
   @Mutation(() => CreateResponse)
   @UseMiddleware(isAuth)
-  async deleteItem(@Arg('id') id: number): Promise<CreateResponse> {
+  async deleteItem(@Arg('id', () => Int) id: number): Promise<CreateResponse> {
     await WhiteListItem.delete(id);
     return {
       status: true,
