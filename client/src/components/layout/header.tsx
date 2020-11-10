@@ -48,8 +48,6 @@ const AppHeader: React.FC<HeaderProps> = ({ user }) => {
 
   const [logout] = useMutation(LOGOUT_MUTATION);
 
-  console.log(user);
-
   const handleLogout = () => {
     logout()
       .then((response) => {

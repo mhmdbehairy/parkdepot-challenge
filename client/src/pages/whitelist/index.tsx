@@ -1,19 +1,28 @@
-import React from 'react';
-import { Space, Table } from 'antd';
+import React, { useState } from 'react';
+import { Button, Modal, Space, Table, notification } from 'antd';
 import styled from '@emotion/styled';
 import { useHistory } from 'react-router-dom';
 import { PrimaryTitle, ContentHeader, PrimaryButton } from 'components';
-import { useQuery } from '@apollo/client';
-import { GET_WHITELIST_ITEMS } from '../../graphql';
+import { useQuery, useMutation } from '@apollo/client';
+import { DELETE_ITEM, GET_WHITELIST_ITEMS } from '../../graphql';
 
-const WhitelistContainer = styled.section``;
+const WhitelistContainer = styled.section`
+  .action-btn {
+    padding: 5px 10px;
+  }
+`;
 
 const WhiteList: React.FC = () => {
   const history = useHistory();
 
+  const [visible, setVisible] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<any>(null);
+
   const { data, loading } = useQuery(GET_WHITELIST_ITEMS, {
     fetchPolicy: 'network-only',
   });
+
+  const [deleteItem, { loading: deletingItem }] = useMutation(DELETE_ITEM);
 
   const columns = [
     {
@@ -34,16 +43,67 @@ const WhiteList: React.FC = () => {
     },
     {
       title: 'Actions',
-      render: () => {
+      render: (item: any) => {
         return (
-          <Space size="large">
-            <a href="#!">Edit</a>
-            <a href="#!">Delete</a>
+          <Space>
+            <Button className="action-btn" type="link">
+              Edit
+            </Button>
+
+            <Button
+              className="action-btn"
+              type="link"
+              danger
+              onClick={async () => {
+                await setItemToDelete(item);
+                setVisible(true);
+              }}
+            >
+              Delete
+            </Button>
           </Space>
         );
       },
     },
   ];
+
+  const handleOk = async () => {
+    await deleteItem({
+      variables: {
+        id: itemToDelete?.id,
+      },
+      refetchQueries: () => [
+        {
+          query: GET_WHITELIST_ITEMS,
+        },
+      ],
+    })
+      .then((res: any) => {
+        const {
+          data: {
+            deleteItem: { status, message },
+          },
+        } = res;
+
+        if (status) {
+          notification['success']({
+            message,
+          });
+          history.push('/whitelist');
+        }
+      })
+      .catch((err) => {
+        notification['error']({
+          message: err.message,
+        });
+      });
+
+    setVisible(false);
+  };
+
+  const handleCancel = () => {
+    setVisible(false);
+  };
 
   return (
     <WhitelistContainer>
@@ -58,7 +118,7 @@ const WhiteList: React.FC = () => {
         bordered
         dataSource={data?.whitelistitems}
         columns={columns}
-        loading={loading}
+        loading={loading || deletingItem}
         rowKey="id"
         pagination={{
           showSizeChanger: true,
@@ -66,6 +126,22 @@ const WhiteList: React.FC = () => {
           defaultPageSize: 5,
         }}
       />
+
+      <Modal
+        title="Are you sure delete this item?"
+        visible={visible}
+        onOk={handleOk}
+        confirmLoading={deletingItem}
+        onCancel={handleCancel}
+      >
+        <p>
+          You are about to delete item with license plate:{' '}
+          <span style={{ color: 'red', fontWeight: 'bold' }}>
+            {itemToDelete?.lisencePlate}
+          </span>
+          . Please, confirm your action.
+        </p>
+      </Modal>
     </WhitelistContainer>
   );
 };
