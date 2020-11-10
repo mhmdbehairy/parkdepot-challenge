@@ -1,7 +1,7 @@
 import {
   Arg,
   Field,
-  Int,
+  ID,
   Mutation,
   ObjectType,
   Query,
@@ -26,9 +26,18 @@ export class WhitelistResolver {
     return WhiteListItem.find();
   }
 
+  @Query(() => WhiteListItem)
+  @UseMiddleware(isAuth)
+  async getWhiteListItem(
+    @Arg('id', () => ID) id: number
+  ): Promise<WhiteListItem> {
+    const item = await WhiteListItem.findOne(id);
+    return item as any;
+  }
+
   @Mutation(() => CreateResponse)
   @UseMiddleware(isAuth)
-  async deleteItem(@Arg('id', () => Int) id: number): Promise<CreateResponse> {
+  async deleteItem(@Arg('id', () => ID) id: number): Promise<CreateResponse> {
     await WhiteListItem.delete(id);
     return {
       status: true,
@@ -39,7 +48,7 @@ export class WhitelistResolver {
   @Mutation(() => CreateResponse)
   @UseMiddleware(isAuth)
   async updateItem(
-    @Arg('id') id: number,
+    @Arg('id', () => ID) id: number,
     @Arg('lisencePlate') lisencePlate: string,
     @Arg('fromTime') fromTime: string,
     @Arg('toTime') toTime: string

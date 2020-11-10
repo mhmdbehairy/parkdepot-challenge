@@ -1,7 +1,7 @@
 import gql from 'graphql-tag';
 
 const DELETE_ITEM = gql`
-  mutation DeleteItem($id: Int!) {
+  mutation DeleteItem($id: ID!) {
     deleteItem(id: $id) {
       status
       message
