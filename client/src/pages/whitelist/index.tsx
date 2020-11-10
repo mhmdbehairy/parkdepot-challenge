@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button, Modal, Space, Table, notification } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 import styled from '@emotion/styled';
 import { useHistory } from 'react-router-dom';
 import { PrimaryTitle, ContentHeader, PrimaryButton } from 'components';
