@@ -1,4 +1,4 @@
-import { AppLayout } from 'components';
+import { AppLayout, PrivateRoute } from 'components';
 import React from 'react';
 
 import { Route, Switch } from 'react-router-dom';
@@ -11,10 +11,10 @@ export const Routes: React.FC = () => {
       <Route exact path="/login" component={Login} />
 
       <AppLayout>
-        <Route exact path="/" component={Home} />
-        <Route exact path="/whitelist" component={WhiteList} />
-        <Route exact path="/new-item" component={CreateForm} />
-        <Route exact path="/edit-item/:id" component={EditForm} />
+        <PrivateRoute exact path="/" component={Home} />
+        <PrivateRoute exact path="/whitelist" component={WhiteList} />
+        <PrivateRoute exact path="/new-item" component={CreateForm} />
+        <PrivateRoute exact path="/edit-item/:id" component={EditForm} />
       </AppLayout>
     </Switch>
   );

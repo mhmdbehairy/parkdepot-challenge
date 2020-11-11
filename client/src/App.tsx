@@ -6,7 +6,7 @@ import { Spin } from 'antd';
 import { useLazyQuery } from '@apollo/client';
 import { ME_QUERY } from './graphql';
 import { useDispatch } from 'react-redux';
-import { setUser } from './components/auth-slice';
+import { setUser, setToken } from './components/auth-slice';
 
 interface Props {}
 
@@ -29,6 +29,7 @@ export const App: React.FC<Props> = () => {
     }).then(async (x) => {
       const { accessToken } = await x.json();
       setAccessToken(accessToken);
+      dispatch(setToken(accessToken));
       getUser();
     });
   }, [getUser]);

@@ -6,6 +6,8 @@ import { useHistory } from 'react-router-dom';
 import { setAccessToken } from '../../accessToken';
 import { LOGIN_MUTATION, ME_QUERY } from '../../graphql';
 import BackgroundImage from '../../images/landing-page.jpg';
+import { useDispatch } from 'react-redux';
+import { setToken, setUser } from 'components/auth-slice';
 
 const { Item } = Form;
 
@@ -50,6 +52,7 @@ interface formValues {
 }
 
 const Login: React.FC = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
   const [login, { loading }] = useMutation(LOGIN_MUTATION);
 
@@ -74,7 +77,7 @@ const Login: React.FC = () => {
       .then((response) => {
         const {
           data: {
-            login: { message, status, redirectionURL },
+            login: { message, status, redirectionURL, accessToken, user },
           },
         } = response;
 
@@ -82,7 +85,9 @@ const Login: React.FC = () => {
           notification['success']({
             message: message,
           });
-          setAccessToken(response.data.login.accessToken);
+          setAccessToken(accessToken);
+          dispatch(setToken(accessToken));
+          dispatch(setUser(user));
           history.push(redirectionURL);
         } else {
           notification['error']({
