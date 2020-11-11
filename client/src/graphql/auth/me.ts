@@ -5,6 +5,10 @@ const ME_QUERY = gql`
     me {
       id
       email
+      firstName
+      lastName
+      permissions
+      role
     }
   }
 `;
