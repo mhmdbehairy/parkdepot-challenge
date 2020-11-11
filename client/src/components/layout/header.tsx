@@ -5,6 +5,8 @@ import { Link, useHistory } from 'react-router-dom';
 import Logo from '../../images/logo.png';
 import { useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from '../../graphql';
+import { useSelector } from 'react-redux';
+import { selectUser } from 'components/auth-slice';
 
 const { Header } = Layout;
 
@@ -39,12 +41,9 @@ const HeaderContainer = styled.header`
   }
 `;
 
-interface HeaderProps {
-  user: { email: string; id: string };
-}
-
-const AppHeader: React.FC<HeaderProps> = ({ user }) => {
+const AppHeader: React.FC = () => {
   const history = useHistory();
+  const user = useSelector(selectUser);
 
   const [logout] = useMutation(LOGOUT_MUTATION);
 
