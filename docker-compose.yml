@@ -1,0 +1,41 @@
+version: '3'
+services:
+  app:
+    build:
+      context: ./client
+      args:
+        REACT_APP_API: localhost
+    restart: always
+    ports:
+      - 3000:8080
+    depends_on:
+      - api
+    links:
+      - api
+    environment:
+      REACT_APP_API: localhost
+
+  api:
+    build: ./server
+    ports:
+      - 4000:4000
+    environment:
+      DB_HOST: postgres
+      DB_USER: pdadmin
+      DB_PASSWORD: 123456
+      DB_NAME: parkdepotdb
+    depends_on:
+      - postgres
+    links:
+      - postgres
+
+  postgres:
+    container_name: postgres
+    restart: always
+    image: postgres
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: pdadmin
+      POSTGRES_DB: parkdepotdb

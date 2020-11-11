@@ -23,7 +23,7 @@ export const App: React.FC<Props> = () => {
   });
 
   useEffect(() => {
-    fetch('http://localhost:4000/refresh_token', {
+    fetch(`http://${process.env.REACT_APP_API}:4000/refresh_token`, {
       method: 'POST',
       credentials: 'include',
     }).then(async (x) => {
