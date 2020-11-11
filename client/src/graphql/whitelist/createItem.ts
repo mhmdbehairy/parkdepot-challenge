@@ -3,8 +3,8 @@ import gql from 'graphql-tag';
 const CREATE_ITEM = gql`
   mutation CreateItem(
     $lisencePlate: String!
-    $fromTime: String!
-    $toTime: String!
+    $fromTime: String
+    $toTime: String
   ) {
     createItem(
       lisencePlate: $lisencePlate

@@ -12,11 +12,11 @@ export class WhiteListItem extends BaseEntity {
   @Column('text')
   lisencePlate: string;
 
-  @Field()
-  @Column('text')
+  @Field({ nullable: true })
+  @Column('text', { nullable: true })
   fromTime: string;
 
-  @Field()
-  @Column('text')
+  @Field({ nullable: true })
+  @Column('text', { nullable: true })
   toTime: string;
 }
