@@ -44,11 +44,16 @@ const FormContainer = styled.div`
   }
 `;
 
+interface formValues {
+  email: string;
+  password: string;
+}
+
 const Login: React.FC = () => {
   const history = useHistory();
   const [login, { loading }] = useMutation(LOGIN_MUTATION);
 
-  const onFinish = (values: { email: string; password: string }) => {
+  const onFinish = (values: formValues) => {
     const { email, password } = values;
 
     login({
@@ -67,15 +72,21 @@ const Login: React.FC = () => {
       },
     })
       .then((response) => {
-        if (response?.data) {
+        const {
+          data: {
+            login: { message, status, redirectionURL },
+          },
+        } = response;
+
+        if (status) {
           notification['success']({
-            message: 'Successfully logged in!',
+            message: message,
           });
           setAccessToken(response.data.login.accessToken);
-          history.push('/');
+          history.push(redirectionURL);
         } else {
           notification['error']({
-            message: 'Failed to login, try again!',
+            message: message,
           });
         }
       })

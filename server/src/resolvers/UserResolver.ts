@@ -19,9 +19,19 @@ import { verify } from 'jsonwebtoken';
 @ObjectType()
 class LoginResponse {
   @Field()
+  status: boolean;
+
+  @Field()
+  message: string;
+
+  @Field()
+  redirectionURL: string;
+
+  @Field()
   accessToken: string;
-  @Field(() => User)
-  user: User;
+
+  @Field(() => User, { nullable: true })
+  user: User | null;
 }
 
 @Resolver()
@@ -68,19 +78,32 @@ export class UserResolver {
   ): Promise<LoginResponse> {
     const user = await User.findOne({ where: { email } });
 
+    const response = {
+      status: false,
+      message: '',
+      redirectionURL: '',
+      accessToken: '',
+      user: null,
+    };
+
     if (!user) {
-      throw new Error('Could not find user with this email!');
+      response.message = 'Wrong Email!';
+      return response;
     }
 
     const valid = await compare(password, user.password);
 
     if (!valid) {
-      throw new Error('Wrong password!');
+      response.message = 'Wrong password!';
+      return response;
     }
 
     sendRefreshToken(res, createRefreshToken(user));
 
     return {
+      status: true,
+      message: 'User logged in successfully!',
+      redirectionURL: '/',
       accessToken: createAccessToken(user),
       user,
     };
