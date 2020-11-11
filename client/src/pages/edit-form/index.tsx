@@ -42,7 +42,7 @@ const EditForm: React.FC = () => {
   const [form] = Form.useForm();
   const history = useHistory();
 
-  const { data, loading } = useQuery(GET_SINGLE_ITEM, { variables: { id } });
+  const { data } = useQuery(GET_SINGLE_ITEM, { variables: { id } });
 
   const [editItem, { loading: editingItem }] = useMutation(EDIT_ITEM);
 
@@ -89,8 +89,6 @@ const EditForm: React.FC = () => {
       toTime: time,
     });
   };
-
-  console.log(data?.getWhiteListItem?.lisencePlate);
 
   return (
     <NewUserContainer>

@@ -2,8 +2,6 @@ const check = (permissions: [string], action: string) => {
   if (!permissions || !permissions.length) {
     return false;
   }
-
-  console.log(permissions.some((permission) => permission === action));
   return permissions.some((permission) => permission === action);
 };
 
@@ -20,7 +18,6 @@ interface CanProps {
 }
 
 const Can = ({ perform, permissions, yes, no }: CanProps) => {
-  console.log('hello');
   return check(permissions, perform) ? unwrap(yes) : unwrap(no);
 };
 

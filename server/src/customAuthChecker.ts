@@ -17,10 +17,8 @@ export const customAuthChecker: AuthChecker<MyContext> = async (
     const token = authorization.split(' ')[1];
     const payload = verify(token, process.env.ACCESS_TOKEN_SECRET!);
     context.payload = payload as any;
-    console.log(context.payload);
     const user = await User.findOneOrFail(context.payload?.userId);
 
-    console.log(user);
     if (!user) {
       return false;
     }
@@ -30,7 +28,6 @@ export const customAuthChecker: AuthChecker<MyContext> = async (
     }
 
     if (roles.includes(user.role)) {
-      console.log('here');
       return true;
     }
   } catch (err) {
