@@ -21,14 +21,32 @@ const Background = styled.section`
 const FormContainer = styled.div`
   margin: auto;
   width: 25%;
-  height: 300px;
+  height: auto;
   padding: 40px 25px;
   background-color: #fff;
+  border-radius: 10px;
+  text-align: center;
+
+  h2 {
+    margin-bottom: 24px;
+  }
+
+  .ant-input {
+    box-shadow: 0 0 0px 1000px #ffffff inset !important;
+  }
+
+  .submit-btn {
+    width: 100%;
+
+    span {
+      margin: auto;
+    }
+  }
 `;
 
 const Login: React.FC = () => {
   const history = useHistory();
-  const [login] = useMutation(LOGIN_MUTATION);
+  const [login, { loading }] = useMutation(LOGIN_MUTATION);
 
   const onFinish = (values: { email: string; password: string }) => {
     const { email, password } = values;
@@ -71,6 +89,7 @@ const Login: React.FC = () => {
   return (
     <Background>
       <FormContainer>
+        <h2>Welcome back</h2>
         <Form
           name="login-form"
           initialValues={{ remember: true }}
@@ -80,7 +99,7 @@ const Login: React.FC = () => {
             name="email"
             rules={[{ required: true, message: 'Please input your email!' }]}
           >
-            <Input placeholder="Email" size="large" />
+            <Input placeholder="Email Address" size="large" />
           </Item>
 
           <Item
@@ -90,8 +109,14 @@ const Login: React.FC = () => {
             <Input.Password placeholder="Password" size="large" />
           </Item>
 
-          <Button type="primary" htmlType="submit" size="large">
-            Login
+          <Button
+            className="submit-btn"
+            loading={loading}
+            type="primary"
+            htmlType="submit"
+            size="large"
+          >
+            LOG IN
           </Button>
         </Form>
       </FormContainer>
