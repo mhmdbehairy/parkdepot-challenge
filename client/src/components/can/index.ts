@@ -1,5 +1,3 @@
-import React from 'react';
-
 const check = (permissions: [string], action: string) => {
   if (!permissions || !permissions.length) {
     return false;
