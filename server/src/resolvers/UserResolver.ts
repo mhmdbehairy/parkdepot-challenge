@@ -8,7 +8,7 @@ import {
   Resolver,
   Int,
 } from 'type-graphql';
-import { compare } from 'bcryptjs';
+import { compare, hash } from 'bcryptjs';
 import { User } from '../entity/User';
 import { MyContext } from '../MyContext';
 import { createAccessToken, createRefreshToken } from '../auth';
@@ -84,5 +84,33 @@ export class UserResolver {
       accessToken: createAccessToken(user),
       user,
     };
+  }
+
+  @Mutation(() => Boolean)
+  async register(
+    @Arg('firstName') firstName: string,
+    @Arg('lastName') lastName: string,
+    @Arg('email') email: string,
+    @Arg('password') password: string,
+    @Arg('role') role: string,
+    @Arg('permissions', () => [String]) permissions: string[]
+  ) {
+    const hashedPassword = await hash(password, 12);
+
+    try {
+      await User.insert({
+        firstName,
+        lastName,
+        email,
+        password: hashedPassword,
+        role,
+        permissions,
+      });
+    } catch (err) {
+      console.log(err);
+      return false;
+    }
+
+    return true;
   }
 }

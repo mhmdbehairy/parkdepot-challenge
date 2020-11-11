@@ -1,5 +1,6 @@
 import {
   Arg,
+  Authorized,
   Field,
   ID,
   Mutation,
@@ -21,13 +22,15 @@ class CreateResponse {
 
 @Resolver()
 export class WhitelistResolver {
+  @Authorized()
   @Query(() => [WhiteListItem])
   whitelistitems() {
     return WhiteListItem.find();
   }
 
   @Query(() => WhiteListItem)
-  @UseMiddleware(isAuth)
+  //@UseMiddleware(isAuth)
+  @Authorized('Admin', 'Manager', 'Employee')
   async getWhiteListItem(
     @Arg('id', () => ID) id: number
   ): Promise<WhiteListItem> {
@@ -36,7 +39,8 @@ export class WhitelistResolver {
   }
 
   @Mutation(() => CreateResponse)
-  @UseMiddleware(isAuth)
+  //@UseMiddleware(isAuth)
+  @Authorized('Admin', 'Manager')
   async deleteItem(@Arg('id', () => ID) id: number): Promise<CreateResponse> {
     await WhiteListItem.delete(id);
     return {
@@ -46,7 +50,8 @@ export class WhitelistResolver {
   }
 
   @Mutation(() => CreateResponse)
-  @UseMiddleware(isAuth)
+  //@UseMiddleware(isAuth)
+  @Authorized('Admin', 'Manager', 'Employee')
   async updateItem(
     @Arg('id', () => ID) id: number,
     @Arg('lisencePlate') lisencePlate: string,
@@ -71,7 +76,8 @@ export class WhitelistResolver {
   }
 
   @Mutation(() => CreateResponse)
-  @UseMiddleware(isAuth)
+  //@UseMiddleware(isAuth)
+  @Authorized('Admin', 'Manager')
   async createItem(
     @Arg('lisencePlate') lisencePlate: string,
     @Arg('fromTime') fromTime: string,
