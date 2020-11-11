@@ -48,20 +48,19 @@ const AppHeader: React.FC = () => {
   const [logout] = useMutation(LOGOUT_MUTATION);
 
   const handleLogout = () => {
-    logout()
-      .then((response) => {
-        if (response?.data?.logout) {
-          notification['success']({
-            message: 'Successfully logged out!',
-          });
-          history.push('/login');
-        }
-      })
-      .catch((err) => {
-        notification['error']({
-          message: err.message,
+    logout().then((response) => {
+      const {
+        data: {
+          logout: { status, message },
+        },
+      } = response;
+      if (status) {
+        notification['success']({
+          message: message,
         });
-      });
+        history.push('/login');
+      }
+    });
   };
 
   return (

@@ -2,7 +2,10 @@ import gql from 'graphql-tag';
 
 const LOGOUT_MUTATION = gql`
   mutation logout {
-    logout
+    logout {
+      status
+      message
+    }
   }
 `;
 

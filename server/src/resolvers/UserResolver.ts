@@ -6,7 +6,7 @@ import {
   ObjectType,
   Query,
   Resolver,
-  Int,
+  ID,
 } from 'type-graphql';
 import { compare, hash } from 'bcryptjs';
 import { User } from '../entity/User';
@@ -34,6 +34,15 @@ class LoginResponse {
   user: User | null;
 }
 
+@ObjectType()
+class LogoutResponse {
+  @Field()
+  status: boolean;
+
+  @Field()
+  message: string;
+}
+
 @Resolver()
 export class UserResolver {
   @Query(() => User, { nullable: true })
@@ -56,7 +65,7 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  async revokeRefreshTokensForUser(@Arg('userId', () => Int) userId: number) {
+  async revokeRefreshTokensForUser(@Arg('userId', () => ID) userId: number) {
     await getConnection()
       .getRepository(User)
       .increment({ id: userId }, 'tokenVersion', 1);
@@ -64,10 +73,13 @@ export class UserResolver {
     return true;
   }
 
-  @Mutation(() => Boolean)
-  async logout(@Ctx() { res }: MyContext) {
+  @Mutation(() => LogoutResponse)
+  async logout(@Ctx() { res }: MyContext): Promise<LogoutResponse> {
     sendRefreshToken(res, '');
-    return true;
+    return {
+      status: true,
+      message: 'User logged out successfully!',
+    };
   }
 
   @Mutation(() => LoginResponse)
