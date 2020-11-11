@@ -12,6 +12,7 @@ import cors from 'cors';
 import { User } from './entity/User';
 import { createAccessToken, createRefreshToken } from './auth';
 import { sendRefreshToken } from './sendRefreshTokem';
+import { customAuthChecker } from './customAuthChecker';
 
 (async () => {
   const app = express();
@@ -57,6 +58,8 @@ import { sendRefreshToken } from './sendRefreshTokem';
   const apolloServer = new ApolloServer({
     schema: await buildSchema({
       resolvers: [UserResolver, WhitelistResolver],
+      authChecker: customAuthChecker,
+      validate: false,
     }),
     context: ({ req, res }) => ({ req, res }),
   });
