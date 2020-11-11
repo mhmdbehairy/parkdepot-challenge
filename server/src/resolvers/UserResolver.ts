@@ -6,7 +6,7 @@ import {
   ObjectType,
   Query,
   Resolver,
-  Int,
+  ID,
 } from 'type-graphql';
 import { compare, hash } from 'bcryptjs';
 import { User } from '../entity/User';
@@ -19,9 +19,28 @@ import { verify } from 'jsonwebtoken';
 @ObjectType()
 class LoginResponse {
   @Field()
+  status: boolean;
+
+  @Field()
+  message: string;
+
+  @Field()
+  redirectionURL: string;
+
+  @Field()
   accessToken: string;
-  @Field(() => User)
-  user: User;
+
+  @Field(() => User, { nullable: true })
+  user: User | null;
+}
+
+@ObjectType()
+class LogoutResponse {
+  @Field()
+  status: boolean;
+
+  @Field()
+  message: string;
 }
 
 @Resolver()
@@ -46,7 +65,7 @@ export class UserResolver {
   }
 
   @Mutation(() => Boolean)
-  async revokeRefreshTokensForUser(@Arg('userId', () => Int) userId: number) {
+  async revokeRefreshTokensForUser(@Arg('userId', () => ID) userId: number) {
     await getConnection()
       .getRepository(User)
       .increment({ id: userId }, 'tokenVersion', 1);
@@ -54,10 +73,13 @@ export class UserResolver {
     return true;
   }
 
-  @Mutation(() => Boolean)
-  async logout(@Ctx() { res }: MyContext) {
+  @Mutation(() => LogoutResponse)
+  async logout(@Ctx() { res }: MyContext): Promise<LogoutResponse> {
     sendRefreshToken(res, '');
-    return true;
+    return {
+      status: true,
+      message: 'User logged out successfully!',
+    };
   }
 
   @Mutation(() => LoginResponse)
@@ -68,19 +90,32 @@ export class UserResolver {
   ): Promise<LoginResponse> {
     const user = await User.findOne({ where: { email } });
 
+    const response = {
+      status: false,
+      message: '',
+      redirectionURL: '',
+      accessToken: '',
+      user: null,
+    };
+
     if (!user) {
-      throw new Error('Could not find user with this email!');
+      response.message = 'Wrong Email!';
+      return response;
     }
 
     const valid = await compare(password, user.password);
 
     if (!valid) {
-      throw new Error('Wrong password!');
+      response.message = 'Wrong password!';
+      return response;
     }
 
     sendRefreshToken(res, createRefreshToken(user));
 
     return {
+      status: true,
+      message: 'User logged in successfully!',
+      redirectionURL: '/',
       accessToken: createAccessToken(user),
       user,
     };

@@ -78,8 +78,8 @@ export class WhitelistResolver {
   @Authorized('Admin', 'Manager')
   async createItem(
     @Arg('lisencePlate') lisencePlate: string,
-    @Arg('fromTime') fromTime: string,
-    @Arg('toTime') toTime: string
+    @Arg('fromTime', {nullable: true}) fromTime: string,
+    @Arg('toTime', {nullable: true}) toTime: string
   ): Promise<CreateResponse> {
     try {
       await WhiteListItem.insert({

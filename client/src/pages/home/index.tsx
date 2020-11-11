@@ -4,7 +4,7 @@ import { PrimaryTitle, ContentHeader } from 'components';
 const Home: React.FC = () => {
   return (
     <ContentHeader>
-      <PrimaryTitle>Welcome to Home Page</PrimaryTitle>
+      <PrimaryTitle>Home Page</PrimaryTitle>
     </ContentHeader>
   );
 };

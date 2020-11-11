@@ -20,6 +20,7 @@ import {
 } from 'components';
 import { CREATE_ITEM } from '../../graphql';
 import { useMutation } from '@apollo/client';
+import moment from 'moment';
 
 const { Item } = Form;
 
@@ -43,8 +44,8 @@ const CreateForm: React.FC = () => {
     createItem({
       variables: {
         lisencePlate,
-        fromTime,
-        toTime,
+        fromTime: moment(fromTime).format('HH:MM A'),
+        toTime: moment(toTime).format('HH:MM A'),
       },
     })
       .then((res: any) => {

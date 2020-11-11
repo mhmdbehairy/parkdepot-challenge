@@ -6,6 +6,8 @@ import { useHistory } from 'react-router-dom';
 import { setAccessToken } from '../../accessToken';
 import { LOGIN_MUTATION, ME_QUERY } from '../../graphql';
 import BackgroundImage from '../../images/landing-page.jpg';
+import { useDispatch } from 'react-redux';
+import { setToken, setUser } from 'components/auth-slice';
 
 const { Item } = Form;
 
@@ -20,7 +22,7 @@ const Background = styled.section`
 
 const FormContainer = styled.div`
   margin: auto;
-  width: 25%;
+  min-width: 25%;
   height: auto;
   padding: 40px 25px;
   background-color: #fff;
@@ -32,7 +34,7 @@ const FormContainer = styled.div`
   }
 
   .ant-input {
-    box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    box-shadow: 0 0 0px 1000px #fff inset;
   }
 
   .submit-btn {
@@ -44,11 +46,17 @@ const FormContainer = styled.div`
   }
 `;
 
+interface formValues {
+  email: string;
+  password: string;
+}
+
 const Login: React.FC = () => {
+  const dispatch = useDispatch();
   const history = useHistory();
   const [login, { loading }] = useMutation(LOGIN_MUTATION);
 
-  const onFinish = (values: { email: string; password: string }) => {
+  const onFinish = (values: formValues) => {
     const { email, password } = values;
 
     login({
@@ -67,15 +75,23 @@ const Login: React.FC = () => {
       },
     })
       .then((response) => {
-        if (response?.data) {
+        const {
+          data: {
+            login: { message, status, redirectionURL, accessToken, user },
+          },
+        } = response;
+
+        if (status) {
           notification['success']({
-            message: 'Successfully logged in!',
+            message: message,
           });
-          setAccessToken(response.data.login.accessToken);
-          history.push('/');
+          setAccessToken(accessToken);
+          dispatch(setToken(accessToken));
+          dispatch(setUser(user));
+          history.push(redirectionURL);
         } else {
           notification['error']({
-            message: 'Failed to login, try again!',
+            message: message,
           });
         }
       })
@@ -89,7 +105,7 @@ const Login: React.FC = () => {
   return (
     <Background>
       <FormContainer>
-        <h2>Welcome back</h2>
+        <h2>Welcome back!</h2>
         <Form
           name="login-form"
           initialValues={{ remember: true }}
