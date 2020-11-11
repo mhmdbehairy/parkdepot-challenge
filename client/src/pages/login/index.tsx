@@ -20,7 +20,7 @@ const Background = styled.section`
 
 const FormContainer = styled.div`
   margin: auto;
-  width: 25%;
+  min-width: 25%;
   height: auto;
   padding: 40px 25px;
   background-color: #fff;
@@ -32,7 +32,7 @@ const FormContainer = styled.div`
   }
 
   .ant-input {
-    box-shadow: 0 0 0px 1000px #ffffff inset !important;
+    box-shadow: 0 0 0px 1000px #fff inset;
   }
 
   .submit-btn {
@@ -89,7 +89,7 @@ const Login: React.FC = () => {
   return (
     <Background>
       <FormContainer>
-        <h2>Welcome back</h2>
+        <h2>Welcome back!</h2>
         <Form
           name="login-form"
           initialValues={{ remember: true }}
