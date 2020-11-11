@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Button, Modal, Space, Table, notification } from 'antd';
 import styled from '@emotion/styled';
 import { useHistory } from 'react-router-dom';
-import { PrimaryTitle, ContentHeader, PrimaryButton } from 'components';
+import { PrimaryTitle, ContentHeader, PrimaryButton, Can } from 'components';
 import { useQuery, useMutation } from '@apollo/client';
-import { DELETE_ITEM, GET_WHITELIST_ITEMS } from '../../graphql';
+import { DELETE_ITEM, GET_WHITELIST_ITEMS, ME_QUERY } from '../../graphql';
 
 const WhitelistContainer = styled.section`
   .action-btn {
@@ -18,6 +18,7 @@ const WhiteList: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
 
+  const { data: myData } = useQuery(ME_QUERY);
   const { data, loading } = useQuery(GET_WHITELIST_ITEMS, {
     fetchPolicy: 'network-only',
   });
@@ -109,9 +110,15 @@ const WhiteList: React.FC = () => {
     <WhitelistContainer>
       <ContentHeader>
         <PrimaryTitle>Whitelist</PrimaryTitle>
-        <PrimaryButton onClick={() => history.push('/new-item')}>
-          Add Item
-        </PrimaryButton>
+        <Can
+          perform="CREATE_ITEM"
+          permissions={myData?.me?.permissions}
+          yes={
+            <PrimaryButton onClick={() => history.push('/new-item')}>
+              Add Item
+            </PrimaryButton>
+          }
+        />
       </ContentHeader>
 
       <Table

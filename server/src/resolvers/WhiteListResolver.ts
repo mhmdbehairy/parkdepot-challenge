@@ -7,9 +7,7 @@ import {
   ObjectType,
   Query,
   Resolver,
-  UseMiddleware,
 } from 'type-graphql';
-import { isAuth } from '../isAuth';
 import { WhiteListItem } from '../entity/WhitelistItem';
 
 @ObjectType()
