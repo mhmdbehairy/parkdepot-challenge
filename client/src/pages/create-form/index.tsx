@@ -46,8 +46,8 @@ const CreateForm: React.FC = () => {
     createItem({
       variables: {
         lisencePlate,
-        fromTime: fromTime ? moment(fromTime).format('HH:MM A') : null,
-        toTime: toTime ? moment(toTime).format('HH:MM A') : null,
+        fromTime: fromTime ? moment(fromTime).format('HH:mm A') : null,
+        toTime: toTime ? moment(toTime).format('HH:mm A') : null,
       },
     }).then((res: any) => {
       const {

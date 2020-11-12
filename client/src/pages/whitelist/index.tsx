@@ -47,7 +47,11 @@ const WhiteList: React.FC = () => {
       render: (item: any) => {
         return (
           <Space>
-            <Button className="action-btn" type="link">
+            <Button
+              className="action-btn"
+              type="link"
+              onClick={() => history.push(`/edit-item/${item.id}`)}
+            >
               Edit
             </Button>
 
