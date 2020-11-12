@@ -27,7 +27,11 @@ export class WhitelistResolver {
   @Authorized('VIEW_ITEMS')
   @Query(() => [WhiteListItem])
   whitelistitems() {
-    return WhiteListItem.find();
+    return WhiteListItem.find({
+      order: {
+        id: 'DESC',
+      },
+    });
   }
 
   @Query(() => WhiteListItem)
