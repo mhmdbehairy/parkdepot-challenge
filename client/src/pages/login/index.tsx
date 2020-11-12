@@ -59,6 +59,7 @@ const Login: React.FC = () => {
 
   useEffect(() => {
     if (token) {
+      console.log(token);
       notification['info']({
         message: 'You are already logged in!',
       });

@@ -5,8 +5,8 @@ import { Link, useHistory } from 'react-router-dom';
 import Logo from '../../images/logo.png';
 import { useMutation } from '@apollo/client';
 import { LOGOUT_MUTATION } from '../../graphql';
-import { useSelector } from 'react-redux';
-import { selectUser } from 'components/auth-slice';
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser, setToken } from 'components/auth-slice';
 
 const { Header } = Layout;
 
@@ -43,6 +43,7 @@ const HeaderContainer = styled.header`
 
 const AppHeader: React.FC = () => {
   const history = useHistory();
+  const dispatch = useDispatch();
   const user = useSelector(selectUser);
 
   const [logout] = useMutation(LOGOUT_MUTATION);
@@ -58,6 +59,7 @@ const AppHeader: React.FC = () => {
         notification['success']({
           message: message,
         });
+        dispatch(setToken(''));
         history.push('/');
       }
     });
@@ -71,7 +73,7 @@ const AppHeader: React.FC = () => {
             flex: '1 1 0',
           }}
         >
-          <Link to="/">
+          <Link to="/home">
             <img src={Logo} alt="The park-depot logo" />
           </Link>
         </div>

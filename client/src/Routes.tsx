@@ -16,33 +16,35 @@ import {
 export const Routes: React.FC = () => {
   return (
     <>
-      <Route exact path="/" component={Login} />
+      <Switch>
+        <Route exact path="/" component={Login} />
 
-      <AppLayout>
-        <Switch>
-          <PrivateRoute exact path="/home" component={Home} />
-          <PrivateRoute
-            exact
-            path="/whitelist"
-            permission="VIEW_ITEMS"
-            component={WhiteList}
-          />
-          <PrivateRoute
-            exact
-            path="/new-item"
-            permission="CREATE_ITEM"
-            component={CreateForm}
-          />
-          <PrivateRoute
-            path="/edit-item/:id"
-            permission="UPDATE_ITEM"
-            component={EditForm}
-          />
+        <AppLayout>
+          <Switch>
+            <PrivateRoute exact path="/home" component={Home} />
+            <PrivateRoute
+              exact
+              path="/whitelist"
+              permission="VIEW_ITEMS"
+              component={WhiteList}
+            />
+            <PrivateRoute
+              exact
+              path="/new-item"
+              permission="CREATE_ITEM"
+              component={CreateForm}
+            />
+            <PrivateRoute
+              path="/edit-item/:id"
+              permission="UPDATE_ITEM"
+              component={EditForm}
+            />
 
-          <Route path="/401" component={Unauthorized} />
-          <Route component={NotFound} />
-        </Switch>
-      </AppLayout>
+            <Route path="/401" component={Unauthorized} />
+            <Route component={NotFound} />
+          </Switch>
+        </AppLayout>
+      </Switch>
     </>
   );
 };
