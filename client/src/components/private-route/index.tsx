@@ -22,7 +22,7 @@ const PrivateRoute = ({ component: Component, permission, ...rest }: any) => {
             <Component {...props} />
           )
         ) : (
-          <Redirect to="/login" />
+          <Redirect to="/" />
         )
       }
     />

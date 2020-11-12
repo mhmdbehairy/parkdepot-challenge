@@ -112,7 +112,7 @@ export class UserResolver {
     return {
       status: true,
       message: 'User logged in successfully!',
-      redirectionURL: '/',
+      redirectionURL: '/home',
       accessToken: createAccessToken(user),
       user,
     };

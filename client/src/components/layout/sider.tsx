@@ -26,11 +26,11 @@ const AppSider: React.FC = () => {
         <Menu
           mode="inline"
           className="side-menu"
-          defaultSelectedKeys={['/']}
+          defaultSelectedKeys={['/home']}
           selectedKeys={[location.pathname]}
         >
-          <Item className="menuItem" key="/">
-            <Link to="/">Home</Link>
+          <Item className="menuItem" key="/home">
+            <Link to="/home">Home</Link>
           </Item>
           <Item className="menuItem" key="/whitelist">
             <Link to="/whitelist">WhiteList</Link>

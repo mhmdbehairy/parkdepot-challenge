@@ -7,6 +7,7 @@ import { useLazyQuery } from '@apollo/client';
 import { ME_QUERY } from './graphql';
 import { useDispatch } from 'react-redux';
 import { setUser, setToken } from './components/auth-slice';
+import { Redirect } from 'react-router-dom';
 
 interface Props {}
 
@@ -26,12 +27,18 @@ export const App: React.FC<Props> = () => {
     fetch(`http://${process.env.REACT_APP_API}:4000/refresh_token`, {
       method: 'POST',
       credentials: 'include',
-    }).then(async (x) => {
-      const { accessToken } = await x.json();
-      setAccessToken(accessToken);
-      dispatch(setToken(accessToken));
-      getUser();
-    });
+    })
+      .then(async (x) => {
+        const { accessToken } = await x.json();
+        setAccessToken(accessToken);
+        dispatch(setToken(accessToken));
+        getUser();
+      })
+      .catch((err) => {
+        console.log(err);
+        setLoading(false);
+        <Redirect to="/" />;
+      });
   }, [getUser]);
 
   if (loading) {

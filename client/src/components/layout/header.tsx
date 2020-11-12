@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
-import { Layout, Button, notification, Badge } from 'antd';
+import { Layout, Button, notification, Badge, Popconfirm } from 'antd';
 import { Link, useHistory } from 'react-router-dom';
 import Logo from '../../images/logo.png';
 import { useMutation } from '@apollo/client';
@@ -58,7 +58,7 @@ const AppHeader: React.FC = () => {
         notification['success']({
           message: message,
         });
-        history.push('/login');
+        history.push('/');
       }
     });
   };
@@ -78,9 +78,17 @@ const AppHeader: React.FC = () => {
 
         <Badge className="user-email" status="success" text={user?.email} />
 
-        <Button type="link" className="logout-link" onClick={handleLogout}>
-          Logout
-        </Button>
+        <Popconfirm
+          title="Are you sure you want to discard?"
+          okText="Yes"
+          cancelText="No"
+          onConfirm={handleLogout}
+          onCancel={() => {}}
+        >
+          <Button type="link" className="logout-link">
+            Logout
+          </Button>
+        </Popconfirm>
       </Header>
     </HeaderContainer>
   );

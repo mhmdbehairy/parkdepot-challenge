@@ -15,10 +15,10 @@ import {
 export const Routes: React.FC = () => {
   return (
     <Switch>
-      <Route exact path="/login" component={Login} />
+      <Route exact path="/" component={Login} />
 
       <AppLayout>
-        <PrivateRoute exact path="/" component={Home} />
+        <PrivateRoute exact path="/home" component={Home} />
         <PrivateRoute
           exact
           path="/whitelist"
