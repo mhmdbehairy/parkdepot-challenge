@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from '@emotion/styled';
 import { useHistory } from 'react-router-dom';
 import {
@@ -33,6 +33,8 @@ const NewUserContainer = styled.section`
 `;
 
 const CreateForm: React.FC = () => {
+  const [disabled, setDisabled] = useState(true);
+
   const [form] = Form.useForm();
   const history = useHistory();
 
@@ -44,8 +46,8 @@ const CreateForm: React.FC = () => {
     createItem({
       variables: {
         lisencePlate,
-        fromTime: moment(fromTime).format('HH:MM A'),
-        toTime: moment(toTime).format('HH:MM A'),
+        fromTime: fromTime ? moment(fromTime).format('HH:MM A') : null,
+        toTime: toTime ? moment(toTime).format('HH:MM A') : null,
       },
     }).then((res: any) => {
       const {
@@ -71,12 +73,20 @@ const CreateForm: React.FC = () => {
     form.setFieldsValue({
       fromTime: time,
     });
+    setDisabled(false);
   };
 
   const toPickerBlur = (time: any) => {
     form.setFieldsValue({
       toTime: time,
     });
+  };
+
+  const updateDisabled = (time: any) => {
+    form.setFieldsValue({
+      toTime: null,
+    });
+    setDisabled(true);
   };
 
   return (
@@ -110,18 +120,20 @@ const CreateForm: React.FC = () => {
                 size="large"
                 showNow
                 onSelect={fromPickerBlur}
+                onChange={updateDisabled}
                 format="HH:mm"
               />
             </Item>
           </Col>
 
           <Col span={12}>
-            <Item name="toTime" label="To (Optional)">
+            <Item name="toTime" label="To">
               <TimePicker
                 size="large"
                 showNow
                 onSelect={toPickerBlur}
                 format="HH:mm"
+                disabled={disabled}
               />
             </Item>
           </Col>

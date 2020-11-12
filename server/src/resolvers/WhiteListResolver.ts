@@ -18,7 +18,7 @@ class ActionResponse {
   @Field()
   message: string;
 
-  @Field(() => WhiteListItem)
+  @Field(() => WhiteListItem, { nullable: true })
   whitelistItem: WhiteListItem | null;
 }
 
@@ -95,6 +95,16 @@ export class WhitelistResolver {
     @Arg('fromTime', { nullable: true }) fromTime: string,
     @Arg('toTime', { nullable: true }) toTime: string
   ): Promise<ActionResponse> {
+    console.log(fromTime, toTime);
+    if ((fromTime && !toTime) || (toTime && !fromTime)) {
+      console.log('here');
+      return {
+        status: false,
+        message: 'Pick both (from and to) time or none!',
+        whitelistItem: null,
+      };
+    }
+
     let insertResult = null;
     let insertedItem = null;
     try {
