@@ -47,26 +47,24 @@ const CreateForm: React.FC = () => {
         fromTime: moment(fromTime).format('HH:MM A'),
         toTime: moment(toTime).format('HH:MM A'),
       },
-    })
-      .then((res: any) => {
-        const {
-          data: {
-            createItem: { status, message },
-          },
-        } = res;
+    }).then((res: any) => {
+      const {
+        data: {
+          createItem: { status, message },
+        },
+      } = res;
 
-        if (status) {
-          notification['success']({
-            message,
-          });
-          history.push('/whitelist');
-        }
-      })
-      .catch((err) => {
-        notification['error']({
-          message: err.message,
+      if (status) {
+        notification['success']({
+          message,
         });
-      });
+        history.push('/whitelist');
+      } else {
+        notification['error']({
+          message,
+        });
+      }
+    });
   };
 
   const fromPickerBlur = (time: any) => {
