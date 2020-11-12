@@ -11,16 +11,20 @@ import {
 import { WhiteListItem } from '../entity/WhitelistItem';
 
 @ObjectType()
-class CreateResponse {
+class ActionResponse {
   @Field()
   status: boolean;
+
   @Field()
   message: string;
+
+  @Field(() => WhiteListItem, { nullable: true })
+  whitelistItem: WhiteListItem | null;
 }
 
 @Resolver()
 export class WhitelistResolver {
-  @Authorized()
+  @Authorized('VIEW_ITEMS')
   @Query(() => [WhiteListItem])
   whitelistitems() {
     return WhiteListItem.find();
@@ -28,7 +32,7 @@ export class WhitelistResolver {
 
   @Query(() => WhiteListItem)
   //@UseMiddleware(isAuth)
-  @Authorized('Admin', 'Manager', 'Employee')
+  @Authorized()
   async getWhiteListItem(
     @Arg('id', () => ID) id: number
   ): Promise<WhiteListItem> {
@@ -36,32 +40,43 @@ export class WhitelistResolver {
     return item as any;
   }
 
-  @Mutation(() => CreateResponse)
+  @Mutation(() => ActionResponse)
   //@UseMiddleware(isAuth)
-  @Authorized('Admin', 'Manager')
-  async deleteItem(@Arg('id', () => ID) id: number): Promise<CreateResponse> {
+  @Authorized('DELETE_ITEM')
+  async deleteItem(@Arg('id', () => ID) id: number): Promise<ActionResponse> {
     await WhiteListItem.delete(id);
+
     return {
       status: true,
       message: 'Item deleted successfully!',
+      whitelistItem: null,
     };
   }
 
-  @Mutation(() => CreateResponse)
+  @Mutation(() => ActionResponse)
   //@UseMiddleware(isAuth)
-  @Authorized('Admin', 'Manager', 'Employee')
+  @Authorized('UPDATE_ITEM')
   async updateItem(
     @Arg('id', () => ID) id: number,
     @Arg('lisencePlate') lisencePlate: string,
-    @Arg('fromTime') fromTime: string,
-    @Arg('toTime') toTime: string
-  ): Promise<CreateResponse> {
+    @Arg('fromTime', { nullable: true }) fromTime: string,
+    @Arg('toTime', { nullable: true }) toTime: string
+  ): Promise<ActionResponse> {
+    if ((fromTime && !toTime) || (toTime && !fromTime)) {
+      return {
+        status: false,
+        message: 'Pick both (from and to) time or none!',
+        whitelistItem: null,
+      };
+    }
+
     const item = await WhiteListItem.findOne(id);
 
     if (!item) {
       return {
         status: false,
         message: 'Item not found!',
+        whitelistItem: null,
       };
     }
 
@@ -70,34 +85,51 @@ export class WhitelistResolver {
     return {
       status: true,
       message: 'Item updated successfully!',
+      whitelistItem: item || null,
     };
   }
 
-  @Mutation(() => CreateResponse)
+  @Mutation(() => ActionResponse)
   //@UseMiddleware(isAuth)
-  @Authorized('Admin', 'Manager')
+  @Authorized('CREATE_ITEM')
   async createItem(
     @Arg('lisencePlate') lisencePlate: string,
-    @Arg('fromTime', {nullable: true}) fromTime: string,
-    @Arg('toTime', {nullable: true}) toTime: string
-  ): Promise<CreateResponse> {
+    @Arg('fromTime', { nullable: true }) fromTime: string,
+    @Arg('toTime', { nullable: true }) toTime: string
+  ): Promise<ActionResponse> {
+    if ((fromTime && !toTime) || (toTime && !fromTime)) {
+      return {
+        status: false,
+        message: 'Pick both (from and to) time or none!',
+        whitelistItem: null,
+      };
+    }
+
+    let insertResult = null;
+    let insertedItem = null;
     try {
-      await WhiteListItem.insert({
+      insertResult = await WhiteListItem.insert({
         lisencePlate,
         fromTime,
         toTime,
       });
+
+      insertedItem = await WhiteListItem.findOne(
+        insertResult.generatedMaps[0].id
+      );
     } catch (err) {
       console.log(err);
       return {
         status: false,
-        message: 'Failed to create whitelist item!',
+        message: err.detail,
+        whitelistItem: insertedItem || null,
       };
     }
 
     return {
       status: true,
       message: 'Created whiteslist item successfully!',
+      whitelistItem: insertedItem || null,
     };
   }
 }

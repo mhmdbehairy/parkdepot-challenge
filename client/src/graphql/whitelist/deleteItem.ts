@@ -5,6 +5,12 @@ const DELETE_ITEM = gql`
     deleteItem(id: $id) {
       status
       message
+      whitelistItem {
+        id
+        lisencePlate
+        fromTime
+        toTime
+      }
     }
   }
 `;

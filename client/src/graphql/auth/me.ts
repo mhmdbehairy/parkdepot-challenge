@@ -8,7 +8,6 @@ const ME_QUERY = gql`
       firstName
       lastName
       permissions
-      role
     }
   }
 `;

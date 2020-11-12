@@ -5,7 +5,7 @@ import { MyContext } from './MyContext';
 
 export const customAuthChecker: AuthChecker<MyContext> = async (
   { context },
-  roles
+  permissions
 ) => {
   const authorization = context.req.headers['authorization'];
 
@@ -23,11 +23,11 @@ export const customAuthChecker: AuthChecker<MyContext> = async (
       return false;
     }
 
-    if (roles.length === 0) {
+    if (permissions.length === 0) {
       return true;
     }
 
-    if (roles.includes(user.role)) {
+    if (user.permissions.includes(permissions[0])) {
       return true;
     }
   } catch (err) {

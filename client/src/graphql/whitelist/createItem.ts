@@ -13,6 +13,12 @@ const CREATE_ITEM = gql`
     ) {
       status
       message
+      whitelistItem {
+        id
+        lisencePlate
+        fromTime
+        toTime
+      }
     }
   }
 `;
