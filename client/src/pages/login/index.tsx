@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 import { Form, Input, Button, notification } from 'antd';
 import { useMutation } from '@apollo/client';
@@ -6,8 +6,8 @@ import { useHistory } from 'react-router-dom';
 import { setAccessToken } from '../../accessToken';
 import { LOGIN_MUTATION, ME_QUERY } from '../../graphql';
 import BackgroundImage from '../../images/landing-page.jpg';
-import { useDispatch } from 'react-redux';
-import { setToken, setUser } from 'components/auth-slice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectToken, setToken, setUser } from 'components/auth-slice';
 
 const { Item } = Form;
 
@@ -55,6 +55,16 @@ const Login: React.FC = () => {
   const dispatch = useDispatch();
   const history = useHistory();
   const [login, { loading }] = useMutation(LOGIN_MUTATION);
+  const token = useSelector(selectToken);
+
+  useEffect(() => {
+    if (token) {
+      notification['info']({
+        message: 'You are already logged in!',
+      });
+      history.push('/home');
+    }
+  }, []);
 
   const onFinish = (values: formValues) => {
     const { email, password } = values;
