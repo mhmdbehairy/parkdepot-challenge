@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import { useHistory, useParams } from 'react-router-dom';
-import { notification, Spin } from 'antd';
+import { notification } from 'antd';
 import {
   PrimaryTitle,
   ContentHeader,
@@ -78,7 +78,7 @@ const EditForm: React.FC = () => {
       <ContentHeader>
         <PrimaryTitle>Edit Item</PrimaryTitle>
       </ContentHeader>
-      {data?.getWhiteListItem ? (
+      {data?.getWhiteListItem && (
         <WhitelistForm
           onFinish={onFinish}
           actionLoading={editingItem}
@@ -94,10 +94,6 @@ const EditForm: React.FC = () => {
             },
           }}
         />
-      ) : (
-        <div style={{ display: 'flex', height: '100%', width: '100%' }}>
-          <Spin style={{ margin: 'auto' }} />
-        </div>
       )}
     </NewUserContainer>
   );

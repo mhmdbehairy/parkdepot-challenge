@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 import { useHistory } from 'react-router-dom';
 import { PrimaryTitle, ContentHeader, PrimaryButton, Can } from 'components';
 import { useQuery, useMutation } from '@apollo/client';
-import { DELETE_ITEM, GET_WHITELIST_ITEMS, ME_QUERY } from '../../graphql';
+import { DELETE_ITEM, GET_WHITELIST_ITEMS } from '../../graphql';
 
 const WhitelistContainer = styled.section`
   .action-btn {

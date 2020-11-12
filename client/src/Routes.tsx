@@ -3,7 +3,14 @@ import React from 'react';
 
 import { Route, Switch } from 'react-router-dom';
 
-import { Login, WhiteList, Home, CreateForm, EditForm } from './pages';
+import {
+  Login,
+  WhiteList,
+  Home,
+  CreateForm,
+  EditForm,
+  Unauthorized,
+} from './pages';
 
 export const Routes: React.FC = () => {
   return (
@@ -12,9 +19,26 @@ export const Routes: React.FC = () => {
 
       <AppLayout>
         <PrivateRoute exact path="/" component={Home} />
-        <PrivateRoute exact path="/whitelist" component={WhiteList} />
-        <PrivateRoute exact path="/new-item" component={CreateForm} />
-        <PrivateRoute exact path="/edit-item/:id" component={EditForm} />
+        <PrivateRoute
+          exact
+          path="/whitelist"
+          permission="VIEW_ITEMS"
+          component={WhiteList}
+        />
+        <PrivateRoute
+          exact
+          path="/new-item"
+          permission="CREATE_ITEM"
+          component={CreateForm}
+        />
+        <PrivateRoute
+          exact
+          path="/edit-item/:id"
+          permission="UPDATE_ITEM"
+          component={EditForm}
+        />
+
+        <Route path="/401" component={Unauthorized} />
       </AppLayout>
     </Switch>
   );

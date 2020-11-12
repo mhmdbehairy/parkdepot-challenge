@@ -35,7 +35,6 @@ export const App: React.FC<Props> = () => {
   }, [getUser]);
 
   if (loading) {
-    console.log('hi');
     return (
       <div style={{ display: 'flex', height: '100vh' }}>
         <Spin style={{ margin: 'auto' }} />
