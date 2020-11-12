@@ -66,7 +66,7 @@ export const client = new ApolloClient({
         }
       },
       fetchAccessToken: () => {
-        return fetch(`http://${process.env.REACT_APP_API}:4000/refresh_token`, {
+        return fetch(`${process.env.REACT_APP_API}/refresh_token`, {
           method: 'POST',
           credentials: 'include',
         });
@@ -86,7 +86,7 @@ export const client = new ApolloClient({
     }),
     requestLink,
     new HttpLink({
-      uri: `http://${process.env.REACT_APP_API}:4000/graphql`,
+      uri: `${process.env.REACT_APP_API}/graphql`,
       credentials: 'include',
     }),
   ]),

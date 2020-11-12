@@ -14,6 +14,4 @@ COPY . ./
 RUN yarn build
 RUN npm i -g http-server
 
-EXPOSE 8080
-
-CMD ["http-server", "build"]
+CMD ["yarn", "start"]

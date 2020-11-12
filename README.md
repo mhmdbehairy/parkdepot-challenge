@@ -15,8 +15,7 @@
 - Graphql
 - TypeScript
 - Docker
-
-The project relies heavily on using the react hooks including the new redux hooks and the router hooks as they have a significant improvement in performance.
+- Nginx
 
 ---
 
@@ -38,9 +37,7 @@ Now, there are two ways of getting things up and running. I will show you both b
 
 `docker-compose up -d --build`
 
-**Step: 4** Visit: [http://localhost:3000](http://localhost:3000). Now you are good to go.
-
-The backend can be reached on [http://localhost:4000/graphql](http://localhost:4000/graphql)
+**Step: 4** Visit: [http://localhost:3050](http://localhost:3050). Now you are good to go.
 
 ---
 
@@ -112,7 +109,7 @@ So, the permissions you wanna be using are:
 [ "VIEW_ITEMS", "CREATE_ITEM", "UPDATE_ITEM", "DELETE_ITEM]
 ```
 
-Depending on what you pick from the list above, some features may or may not be available.
+Depending on what you pick from the list above, some features may or may not be available to the user from the dashboard.
 
 But, on the bright side you hopefully won't need to do any manual work. And the provided users have the following permissions:
 
