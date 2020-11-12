@@ -8,7 +8,6 @@ import {
   Resolver,
   ID,
 } from 'type-graphql';
-import { compare, hash } from 'bcryptjs';
 import { User } from '../entity/User';
 import { MyContext } from '../MyContext';
 import { createAccessToken, createRefreshToken } from '../auth';
@@ -103,9 +102,7 @@ export class UserResolver {
       return response;
     }
 
-    const valid = await compare(password, user.password);
-
-    if (!valid) {
+    if (password !== user.password) {
       response.message = 'Wrong password!';
       return response;
     }
@@ -129,14 +126,12 @@ export class UserResolver {
     @Arg('password') password: string,
     @Arg('permissions', () => [String]) permissions: string[]
   ) {
-    const hashedPassword = await hash(password, 12);
-
     try {
       await User.insert({
         firstName,
         lastName,
         email,
-        password: hashedPassword,
+        password,
         permissions,
       });
     } catch (err) {
