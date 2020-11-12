@@ -59,9 +59,17 @@ export class WhitelistResolver {
   async updateItem(
     @Arg('id', () => ID) id: number,
     @Arg('lisencePlate') lisencePlate: string,
-    @Arg('fromTime') fromTime: string,
-    @Arg('toTime') toTime: string
+    @Arg('fromTime', { nullable: true }) fromTime: string,
+    @Arg('toTime', { nullable: true }) toTime: string
   ): Promise<ActionResponse> {
+    if ((fromTime && !toTime) || (toTime && !fromTime)) {
+      return {
+        status: false,
+        message: 'Pick both (from and to) time or none!',
+        whitelistItem: null,
+      };
+    }
+
     const item = await WhiteListItem.findOne(id);
 
     if (!item) {
@@ -72,18 +80,12 @@ export class WhitelistResolver {
       };
     }
 
-    const updatResult = await WhiteListItem.update(
-      { id },
-      { lisencePlate, fromTime, toTime }
-    );
-    const updatedItem = await WhiteListItem.findOne(
-      updatResult.generatedMaps[0].id
-    );
+    await WhiteListItem.update({ id }, { lisencePlate, fromTime, toTime });
 
     return {
       status: true,
       message: 'Item updated successfully!',
-      whitelistItem: updatedItem || null,
+      whitelistItem: item || null,
     };
   }
 
@@ -95,9 +97,7 @@ export class WhitelistResolver {
     @Arg('fromTime', { nullable: true }) fromTime: string,
     @Arg('toTime', { nullable: true }) toTime: string
   ): Promise<ActionResponse> {
-    console.log(fromTime, toTime);
     if ((fromTime && !toTime) || (toTime && !fromTime)) {
-      console.log('here');
       return {
         status: false,
         message: 'Pick both (from and to) time or none!',

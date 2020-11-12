@@ -5,4 +5,5 @@ export { default as FormContainer } from './form-container';
 export { default as Can } from './can';
 export { default as AuthReducer } from './auth-slice';
 export { default as PrivateRoute } from './private-route';
+export { default as WhitelistForm } from './whitelist-form';
 export * from './buttons';

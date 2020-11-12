@@ -4,8 +4,8 @@ const EDIT_ITEM = gql`
   mutation UpdateItem(
     $id: ID!
     $lisencePlate: String!
-    $fromTime: String!
-    $toTime: String!
+    $fromTime: String
+    $toTime: String
   ) {
     updateItem(
       id: $id
