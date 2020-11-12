@@ -103,8 +103,12 @@ const EditForm: React.FC = () => {
             onFinish={onFinish}
             initialValues={{
               lisencePlate: data?.getWhiteListItem?.lisencePlate,
-              fromTime: moment(data?.getWhiteListItem?.fromTime, 'HH:mm'),
-              toTime: moment(data?.getWhiteListItem?.toTime, 'HH:mm'),
+              fromTime: data?.getWhiteListItem?.fromTime
+                ? moment(data?.getWhiteListItem?.fromTime, 'HH:mm')
+                : null,
+              toTime: data?.getWhiteListItem?.toTime
+                ? moment(data?.getWhiteListItem?.toTime, 'HH:mm')
+                : null,
             }}
             layout="vertical"
           >
