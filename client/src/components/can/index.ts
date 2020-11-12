@@ -1,3 +1,6 @@
+import { useSelector } from 'react-redux';
+import { selectUser } from 'components/auth-slice';
+
 const check = (permissions: [string], action: string) => {
   if (!permissions || !permissions.length) {
     return false;
@@ -12,13 +15,14 @@ function unwrap(fn: Function) {
 
 interface CanProps {
   perform: string;
-  permissions: [string];
   yes: any;
   no: any;
 }
 
-const Can = ({ perform, permissions, yes, no }: CanProps) => {
-  return check(permissions, perform) ? unwrap(yes) : unwrap(no);
+const Can = ({ perform, yes, no }: CanProps) => {
+  const user = useSelector(selectUser);
+
+  return check(user.permissions, perform) ? unwrap(yes) : unwrap(no);
 };
 
 Can.defaultProps = {

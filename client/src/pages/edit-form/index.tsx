@@ -30,7 +30,10 @@ const EditForm: React.FC = () => {
   const { id } = useParams<ParamTypes>();
   const history = useHistory();
 
-  const { data } = useQuery(GET_SINGLE_ITEM, { variables: { id } });
+  const { data } = useQuery(GET_SINGLE_ITEM, {
+    variables: { id },
+    fetchPolicy: 'network-only',
+  });
 
   const [editItem, { loading: editingItem }] = useMutation(EDIT_ITEM);
 
@@ -44,24 +47,30 @@ const EditForm: React.FC = () => {
         fromTime: fromTime ? moment(fromTime).format('HH:mm A') : null,
         toTime: toTime ? moment(toTime).format('HH:mm A') : null,
       },
-    }).then((res: any) => {
-      const {
-        data: {
-          updateItem: { status, message },
-        },
-      } = res;
+    })
+      .then((res: any) => {
+        const {
+          data: {
+            updateItem: { status, message },
+          },
+        } = res;
 
-      if (status) {
-        notification['success']({
-          message,
-        });
-        history.push('/whitelist');
-      } else {
+        if (status) {
+          notification['success']({
+            message,
+          });
+          history.push('/whitelist');
+        } else {
+          notification['error']({
+            message,
+          });
+        }
+      })
+      .catch((err) => {
         notification['error']({
-          message,
+          message: err.message,
         });
-      }
-    });
+      });
   };
 
   return (
@@ -69,25 +78,27 @@ const EditForm: React.FC = () => {
       <ContentHeader>
         <PrimaryTitle>Edit Item</PrimaryTitle>
       </ContentHeader>
-      <Spin spinning={!data}>
-        {data?.getWhiteListItem && (
-          <WhitelistForm
-            onFinish={onFinish}
-            actionLoading={editingItem}
-            initialValues={{
-              initialValues: {
-                lisencePlate: data?.getWhiteListItem?.lisencePlate,
-                fromTime: data?.getWhiteListItem?.fromTime
-                  ? moment(data?.getWhiteListItem?.fromTime, 'HH:mm')
-                  : null,
-                toTime: data?.getWhiteListItem?.toTime
-                  ? moment(data?.getWhiteListItem?.toTime, 'HH:mm')
-                  : null,
-              },
-            }}
-          />
-        )}
-      </Spin>
+      {data?.getWhiteListItem ? (
+        <WhitelistForm
+          onFinish={onFinish}
+          actionLoading={editingItem}
+          initialValues={{
+            initialValues: {
+              lisencePlate: data?.getWhiteListItem?.lisencePlate,
+              fromTime: data?.getWhiteListItem?.fromTime
+                ? moment(data?.getWhiteListItem?.fromTime, 'HH:mm')
+                : null,
+              toTime: data?.getWhiteListItem?.toTime
+                ? moment(data?.getWhiteListItem?.toTime, 'HH:mm')
+                : null,
+            },
+          }}
+        />
+      ) : (
+        <div style={{ display: 'flex', height: '100%', width: '100%' }}>
+          <Spin style={{ margin: 'auto' }} />
+        </div>
+      )}
     </NewUserContainer>
   );
 };

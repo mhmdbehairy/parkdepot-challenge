@@ -127,7 +127,6 @@ export class UserResolver {
     @Arg('lastName') lastName: string,
     @Arg('email') email: string,
     @Arg('password') password: string,
-    @Arg('role') role: string,
     @Arg('permissions', () => [String]) permissions: string[]
   ) {
     const hashedPassword = await hash(password, 12);
@@ -138,7 +137,6 @@ export class UserResolver {
         lastName,
         email,
         password: hashedPassword,
-        role,
         permissions,
       });
     } catch (err) {

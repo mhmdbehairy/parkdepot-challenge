@@ -18,7 +18,6 @@ const WhiteList: React.FC = () => {
   const [visible, setVisible] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<any>(null);
 
-  const { data: myData } = useQuery(ME_QUERY);
   const { data, loading } = useQuery(GET_WHITELIST_ITEMS, {
     fetchPolicy: 'network-only',
   });
@@ -47,25 +46,35 @@ const WhiteList: React.FC = () => {
       render: (item: any) => {
         return (
           <Space>
-            <Button
-              className="action-btn"
-              type="link"
-              onClick={() => history.push(`/edit-item/${item.id}`)}
-            >
-              Edit
-            </Button>
+            <Can
+              perform="UPDATE_ITEM"
+              yes={
+                <Button
+                  className="action-btn"
+                  type="link"
+                  onClick={() => history.push(`/edit-item/${item.id}`)}
+                >
+                  Edit
+                </Button>
+              }
+            />
 
-            <Button
-              className="action-btn"
-              type="link"
-              danger
-              onClick={async () => {
-                await setItemToDelete(item);
-                setVisible(true);
-              }}
-            >
-              Delete
-            </Button>
+            <Can
+              perform="DELETE_ITEM"
+              yes={
+                <Button
+                  className="action-btn"
+                  type="link"
+                  danger
+                  onClick={async () => {
+                    await setItemToDelete(item);
+                    setVisible(true);
+                  }}
+                >
+                  Delete
+                </Button>
+              }
+            />
           </Space>
         );
       },
@@ -116,7 +125,6 @@ const WhiteList: React.FC = () => {
         <PrimaryTitle>Whitelist</PrimaryTitle>
         <Can
           perform="CREATE_ITEM"
-          permissions={myData?.me?.permissions}
           yes={
             <PrimaryButton onClick={() => history.push('/new-item')}>
               Add Item

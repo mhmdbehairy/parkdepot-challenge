@@ -24,10 +24,6 @@ export class User extends BaseEntity {
   @Column()
   password: string;
 
-  @Field()
-  @Column()
-  role: string;
-
   @Field(() => [String])
   @Column('text', { array: true })
   permissions: string[];

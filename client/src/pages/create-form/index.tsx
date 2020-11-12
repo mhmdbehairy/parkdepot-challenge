@@ -36,24 +36,30 @@ const CreateForm: React.FC = () => {
         fromTime: fromTime ? moment(fromTime).format('HH:mm A') : null,
         toTime: toTime ? moment(toTime).format('HH:mm A') : null,
       },
-    }).then((res: any) => {
-      const {
-        data: {
-          createItem: { status, message },
-        },
-      } = res;
+    })
+      .then((res: any) => {
+        const {
+          data: {
+            createItem: { status, message },
+          },
+        } = res;
 
-      if (status) {
-        notification['success']({
-          message,
-        });
-        history.push('/whitelist');
-      } else {
+        if (status) {
+          notification['success']({
+            message,
+          });
+          history.push('/whitelist');
+        } else {
+          notification['error']({
+            message,
+          });
+        }
+      })
+      .catch((err) => {
         notification['error']({
-          message,
+          message: err.message,
         });
-      }
-    });
+      });
   };
 
   return (
