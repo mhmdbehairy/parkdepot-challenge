@@ -121,3 +121,11 @@ But, on the bright side you hopefully won't need to do any manual work. And the 
 3. trainee: `[VIEW_ITEMS]`
 
 At this point, things get easier. Just go with the flow. If anything came up, feel free to contact me for any additional information.
+
+Below are some images from the app:
+
+![Login page](https://drive.google.com/file/d/18hJ7aJdkn3loAWKXgP5mj71nswGhHB8j/view?usp=sharing)
+
+![Whitelist](https://drive.google.com/file/d/1JWjsuJkPMpNT1liGkn4Akh74pnYGwWzs/view?usp=sharing)
+
+![Create Form](https://drive.google.com/file/d/1rxsv-G4pk5dfkr35Q5QSmJWWAXDyxbbg/view?usp=sharing)
