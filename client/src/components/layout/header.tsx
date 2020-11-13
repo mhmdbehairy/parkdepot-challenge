@@ -81,7 +81,7 @@ const AppHeader: React.FC = () => {
         <Badge className="user-email" status="success" text={user?.email} />
 
         <Popconfirm
-          title="Are you sure you want to discard?"
+          title="Are you sure you want to logout?"
           okText="Yes"
           cancelText="No"
           onConfirm={handleLogout}
